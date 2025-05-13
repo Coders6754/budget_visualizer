@@ -22,6 +22,10 @@ api.interceptors.request.use(request => {
 api.interceptors.response.use(
   response => {
     console.log('Response:', response);
+    // Normalize the response data
+    if (response.data && response.data.data) {
+      return { ...response, data: response.data.data };
+    }
     return response;
   },
   error => {
@@ -37,7 +41,7 @@ api.interceptors.response.use(
 export const getAllTransactions = async () => {
   try {
     const response = await api.get('/api/transactions');
-    console.log('Get Transactions Response:', response.data);
+    // Return the normalized data
     return response.data;
   } catch (error) {
     console.error('Get Transactions Error:', error);
@@ -48,7 +52,7 @@ export const getAllTransactions = async () => {
 export const addTransaction = async (transaction) => {
   try {
     const response = await api.post('/api/transactions', transaction);
-    console.log('Add Transaction Response:', response.data);
+    // Return the normalized data
     return response.data;
   } catch (error) {
     console.error('Add Transaction Error:', error);
@@ -59,7 +63,7 @@ export const addTransaction = async (transaction) => {
 export const deleteTransaction = async (id) => {
   try {
     const response = await api.delete(`/api/transactions/${id}`);
-    console.log('Delete Transaction Response:', response.data);
+    // Return the normalized data
     return response.data;
   } catch (error) {
     console.error('Delete Transaction Error:', error);

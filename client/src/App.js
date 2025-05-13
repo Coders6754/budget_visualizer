@@ -18,23 +18,28 @@ function App() {
 
   const fetchTransactions = async () => {
     try {
-      
       setLoading(true);
       const data = await getAllTransactions();
-      setTransactions(data);
-      setLoading(false);
+      // Handle both array and object response formats
+      const transactionsArray = Array.isArray(data) ? data : data.data || [];
+      setTransactions(transactionsArray);
     } catch (error) {
       console.error('Error fetching transactions:', error);
       toast.error('Failed to load transactions');
+    } finally {
       setLoading(false);
     }
   };
 
   const handleAddTransaction = async (transaction) => {
     try {
-      const newTransaction = await addTransaction(transaction);
-      setTransactions([newTransaction, ...transactions]);
-      setFormVisible(false); 
+      const response = await addTransaction(transaction);
+      // Handle both response formats
+      const newTransaction = response.data || response;
+      
+      // Update transactions state with the new transaction
+      setTransactions(prevTransactions => [newTransaction, ...prevTransactions]);
+      setFormVisible(false);
       toast.success('Transaction added successfully!');
     } catch (error) {
       console.error('Error adding transaction:', error);
@@ -45,7 +50,9 @@ function App() {
   const handleDeleteTransaction = async (id) => {
     try {
       await deleteTransaction(id);
-      setTransactions(transactions.filter(transaction => transaction._id !== id));
+      setTransactions(prevTransactions => 
+        prevTransactions.filter(transaction => transaction._id !== id)
+      );
       toast.success('Transaction deleted successfully!');
     } catch (error) {
       console.error('Error deleting transaction:', error);
