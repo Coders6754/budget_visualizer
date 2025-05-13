@@ -4,7 +4,17 @@ const { connection, PORT } = require("./config/db");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// CORS configuration
+app.use(cors({
+  // Add your Vercel frontend URL here after deployment
+  origin: [
+    'http://localhost:3000',  // Local development
+    'https://finance-budget-frontend.vercel.app'  // Your Vercel frontend URL (update this after deployment)
+  ],
+  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+  credentials: true
+}));
 
 app.use('/api/transactions', require('./routes/transactions'));
 

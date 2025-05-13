@@ -1,26 +1,45 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://testing-2j7e.vercel.app/api/transactions';
+const baseURL = process.env.NODE_ENV === 'production' 
+  ? 'https://finance-budget-backend.onrender.com'
+  : 'http://localhost:5000';
+
+const api = axios.create({
+  baseURL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
 export const getAllTransactions = async () => {
-  const response = await axios.get(API_URL);
-  // Check if the data is properly formatted, and extract the transactions array
-  if (response.data && response.data.data) {
-    return response.data.data; 
-  } else if (Array.isArray(response.data)) {
-    return response.data; 
-  } else {
-    return []; 
+  try {
+    const response = await api.get('/api/transactions');
+    console.log('API Response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
   }
 };
 
 export const addTransaction = async (transaction) => {
-  const response = await axios.post(API_URL, transaction);
-  // Return the transaction data correctly
-  return response.data.data || response.data;
+  try {
+    const response = await api.post('/api/transactions', transaction);
+    console.log('Add Transaction Response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Add Transaction Error:', error);
+    throw error;
+  }
 };
 
 export const deleteTransaction = async (id) => {
-  const response = await axios.delete(`${API_URL}/${id}`);
-  return response.data;
+  try {
+    const response = await api.delete(`/api/transactions/${id}`);
+    console.log('Delete Transaction Response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Delete Transaction Error:', error);
+    throw error;
+  }
 };

@@ -7,16 +7,6 @@ import { getAllTransactions, addTransaction, deleteTransaction } from './service
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Configure toast defaults
-toast.configure({
-  position: "bottom-right",
-  autoClose: 3000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-});
-
 function App() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,15 +65,17 @@ function App() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header balance={totalBalance} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <div className="animate-fade-in">
+        <Header balance={totalBalance} />
+      </div>
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-4 py-6 space-y-6">
         {/* Mobile: Toggle Form Button */}
-        <div className="lg:hidden mb-4">
+        <div className="lg:hidden">
           <button
             onClick={() => setFormVisible(!formVisible)}
-            className="w-full btn-primary flex items-center justify-center"
+            className="w-full btn-primary flex items-center justify-center shadow-md"
           >
             {formVisible ? (
               <>
@@ -103,28 +95,35 @@ function App() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Sidebar - Form & Transactions List */}
-          <div className={`lg:col-span-4 space-y-6 ${formVisible || window.innerWidth >= 1024 ? 'block' : 'hidden'}`}>
-            <TransactionForm onAddTransaction={handleAddTransaction} />
-            <TransactionList
-              transactions={transactions}
-              onDeleteTransaction={handleDeleteTransaction}
-              loading={loading}
-            />
+          <div className={`lg:col-span-4 space-y-6 animate-slide-in ${formVisible || window.innerWidth >= 1024 ? 'block' : 'hidden'}`}>
+            <div className="card">
+              <TransactionForm onAddTransaction={handleAddTransaction} />
+            </div>
+            <div className="card">
+              <TransactionList
+                transactions={transactions}
+                onDeleteTransaction={handleDeleteTransaction}
+                loading={loading}
+              />
+            </div>
           </div>
 
           {/* Main Content - Dashboard */}
-          <div className="lg:col-span-8">
-            <Dashboard transactions={transactions} loading={loading} />
+          <div className="lg:col-span-8 animate-fade-in">
+            <div className="card">
+              <Dashboard transactions={transactions} loading={loading} />
+            </div>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-white py-4 border-t border-gray-200 mt-auto">
-        <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-          Personal Budget Visualizer &copy; {new Date().getFullYear()}
+      <footer className="bg-white py-6 border-t border-gray-200 mt-auto">
+        <div className="container mx-auto px-4 text-center text-gray-600">
+          <p className="text-sm">Personal Budget Visualizer &copy; {new Date().getFullYear()}</p>
+          <p className="text-xs mt-2 text-gray-500">Track your finances with ease</p>
         </div>
       </footer>
 
