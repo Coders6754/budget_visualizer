@@ -7,13 +7,13 @@ app.use(express.json());
 
 // CORS configuration
 app.use(cors({
-  // Add your Vercel frontend URL here after deployment
   origin: [
-    'http://localhost:3000',  // Local development
-    'https://finance-budget-frontend.vercel.app'  // Your Vercel frontend URL (update this after deployment)
+    'http://localhost:3000',
+    'https://budget-visualizer-wpcw.vercel.app'  // Your actual Vercel frontend URL
   ],
-  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use('/api/transactions', require('./routes/transactions'));
