@@ -16,7 +16,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// API Routes
 app.use('/api/transactions', require('./routes/transactions'));
+app.use('/api/budgets', require('./routes/budgets'));
+app.use('/api/recurring', require('./routes/recurring'));
 
 // Health check endpoint
 app.get("/", (req, res) => {
